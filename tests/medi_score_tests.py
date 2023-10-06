@@ -1,7 +1,7 @@
 import unittest
 from medi_score.medi_score import medi_score_calculation
-from medi_score.helpers import get_air_or_oxygen_score
-from medi_score.Enums import AirOrOxygen
+from medi_score.helpers import get_air_or_oxygen_score, get_consciousness_score
+from medi_score.Enums import AirOrOxygen, Consciousness
 
 #                                    -- medi_score_calculation tests --
 class MediScoreCalculationTest(unittest.TestCase):
@@ -19,12 +19,12 @@ class AirOrOxygenTest(unittest.TestCase):
     def test_get_air_or_oxygen_score_returns_false_if_passed_string_value(self):
         """ Confirm get_air_or_oxygen_score returns False if a string is passed """
         result = get_air_or_oxygen_score('nonsense')
-        self.assertFalse(False)
+        self.assertFalse(result)
     
     def test_get_air_or_oxygen_score_returns_false_if_incorrect_passed_value(self):
         """ Confirm get_air_or_oxygen_score returns False if a incorrect value is passed """
         result = get_air_or_oxygen_score(7)
-        self.assertFalse(False)
+        self.assertFalse(result)
 
     def test_get_air_or_oxygen_score_returns_correct_score(self):
         """ Confirm get_air_or_oxygen_score returns correct score when passed 'AIR' or 'OXYGEN' """
@@ -33,6 +33,27 @@ class AirOrOxygenTest(unittest.TestCase):
         oxygen_result = get_air_or_oxygen_score(AirOrOxygen.OXYGEN.value)
         self.assertEqual(oxygen_result, 2)
 
+
+#                                    -- helper function - get_consciousness_score tests --
+class ConsciousnessTest(unittest.TestCase):
+    """ Test module for get_consciousness_score function """
+    
+    def test_get_consciousness_score_returns_false_if_passed_string_value(self):
+        """ Confirm get_consciousness_score returns False if a string is passed """
+        result = get_consciousness_score('nonsense')
+        self.assertFalse(result)
+    
+    def test_get_consciousness_score_returns_false_if_incorrect_passed_value(self):
+        """ Confirm get_consciousness_score returns False if a incorrect value is passed """
+        result = get_consciousness_score(7)
+        self.assertFalse(result)
+
+    def test_get_consciousness_score_returns_correct_score(self):
+        """ Confirm get_consciousness_score returns correct score when passed 'AIR' or 'OXYGEN' """
+        alert_result = get_consciousness_score(Consciousness.ALERT.value)
+        self.assertEqual(alert_result, 0)
+        cvpu_result = get_consciousness_score(Consciousness.CVPU.value)
+        self.assertEqual(cvpu_result, 3)
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,4 +1,4 @@
-from medi_score.Enums import AirOrOxygen
+from medi_score.Enums import AirOrOxygen, Consciousness
 
 def get_air_or_oxygen_score(air_or_oxygen):
     match air_or_oxygen:
@@ -6,6 +6,15 @@ def get_air_or_oxygen_score(air_or_oxygen):
             return air_or_oxygen
         case AirOrOxygen.OXYGEN:
             return air_or_oxygen
+        case _:
+            return False
+        
+def get_consciousness_score(consciousness):
+    match consciousness:
+        case Consciousness.ALERT:
+            return consciousness
+        case Consciousness.CVPU:
+            return consciousness
         case _:
             return False
         
