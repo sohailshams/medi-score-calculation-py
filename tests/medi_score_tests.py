@@ -26,8 +26,8 @@ class AirOrOxygenTest(unittest.TestCase):
         result = get_air_or_oxygen_score(7)
         self.assertFalse(False)
 
-    def test_get_air_or_oxygen_score_returns_correct_value(self):
-        """ Confirm get_air_or_oxygen_score returns correct values when passed 'AIR' or 'OXYGEN' """
+    def test_get_air_or_oxygen_score_returns_correct_score(self):
+        """ Confirm get_air_or_oxygen_score returns correct score when passed 'AIR' or 'OXYGEN' """
         air_result = get_air_or_oxygen_score(AirOrOxygen.AIR.value)
         self.assertEqual(air_result, 0)
         oxygen_result = get_air_or_oxygen_score(AirOrOxygen.OXYGEN.value)
