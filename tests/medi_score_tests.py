@@ -1,6 +1,6 @@
 import unittest
 from medi_score.medi_score import medi_score_calculation
-from medi_score.helpers import get_air_or_oxygen_score, get_consciousness_score, get_respiration_range_score, get_spo2_score
+from medi_score.helpers import get_air_or_oxygen_score, get_consciousness_score, get_respiration_range_score, get_spo2_score, get_temperature_score
 from medi_score.Enums import AirOrOxygen, Consciousness
 
 #                                    -- medi_score_calculation tests --
@@ -173,6 +173,55 @@ class Spo2Test(unittest.TestCase):
         self.assertEqual(result_equal_100, 3)
 
    
+#                                    -- helper function - get_temperature_score tests --
+class TemperatureTest(unittest.TestCase):
+    """ Test module for get_temperature_score function """
+    
+    def test_get_temperature_score_returns_false_if_passed_string_value(self):
+        """ Confirm get_temperature_score returns False if a string is passed """
+        result = get_temperature_score('something')
+        self.assertFalse(result)
+
+    def test_get_temperature_score_returns_correct_score_if_passed_multi_decimal_place_value(self):
+        """ Confirm get_temperature_score returns correct score observation range is <=35.59999 """
+        result = get_temperature_score(35.59999)
+        self.assertEqual(result, 1)
+
+    def test_get_temperature_score_returns_correct_score_if_observation_range_less_equal_35(self):
+        """ Confirm get_temperature_score returns correct score observation range is <=35.0 """
+        result_less_35  = get_temperature_score(35.0)
+        result_equal_350 = get_temperature_score(34.9)
+        self.assertEqual(result_less_35, 3)
+        self.assertEqual(result_equal_350, 3)
+
+    def test_get_temperature_score_returns_correct_score_if_observation_range_351_360(self):
+        """ Confirm get_temperature_score returns correct score observation range is >=35.1 and <=36.0 """
+        result_equal_351  = get_temperature_score(35.1)
+        result_equal_36 = get_temperature_score(36)
+        self.assertEqual(result_equal_351, 1)
+        self.assertEqual(result_equal_36, 1)
+
+    def test_get_temperature_score_returns_correct_score_if_observation_range_361_38(self):
+        """ Confirm get_temperature_score returns correct score observation range is >=36.1 and <=38.0 """
+        result_equal_361  = get_temperature_score(36.1)
+        result_equal_380 = get_temperature_score(38.0)
+        self.assertEqual(result_equal_361, 0)
+        self.assertEqual(result_equal_380, 0)
+
+    def test_get_temperature_score_returns_correct_score_if_observation_range_381_39(self):
+        """ Confirm get_temperature_score returns correct score observation range is >=38.1 and <=39.0 """
+        result_equal_381  = get_temperature_score(38.1)
+        result_equal_390 = get_temperature_score(39.0)
+        self.assertEqual(result_equal_381, 1)
+        self.assertEqual(result_equal_390, 1)
+
+    def test_get_temperature_score_returns_correct_score_if_observation_range_391_greater(self):
+        """ Confirm get_temperature_score returns correct score observation range is >=39.1 """
+        result_equal_391  = get_temperature_score(39.1)
+        result_equal_40 = get_temperature_score(40.0)
+        self.assertEqual(result_equal_391, 2)
+        self.assertEqual(result_equal_40, 2)
+
 
 
 if __name__ == '__main__':

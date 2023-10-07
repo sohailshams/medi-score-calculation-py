@@ -53,3 +53,23 @@ def get_spo2_score(spo, air_or_oxygen=None):
     else:
       return False
 
+def get_temperature_score(temperature):
+    # Converting temperature into float data type
+    try:
+        # Round temperature to one decimal place
+        temperature = "{:.1f}".format(temperature)
+        temperature = float(temperature)
+    except:
+        return False
+
+    if temperature <= 35.0:
+      return 3
+    elif (temperature >= 35.1 and temperature <= 36.0) or (temperature >= 38.1 and temperature <= 39.0):
+      return 1
+    elif temperature >= 36.1 and temperature <= 38.0:
+      return 0
+    elif temperature >= 39.1:
+      return 2
+    else:
+      return False
+    
