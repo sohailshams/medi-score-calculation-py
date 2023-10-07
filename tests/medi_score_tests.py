@@ -1,6 +1,6 @@
 import unittest
 from medi_score.medi_score import medi_score_calculation
-from medi_score.helpers import get_air_or_oxygen_score, get_consciousness_score, get_respiration_range_score
+from medi_score.helpers import get_air_or_oxygen_score, get_consciousness_score, get_respiration_range_score, get_spo2_score
 from medi_score.Enums import AirOrOxygen, Consciousness
 
 #                                    -- medi_score_calculation tests --
@@ -105,6 +105,74 @@ class RespirationRangeTest(unittest.TestCase):
         result_greater_25 = get_respiration_range_score(30)
         self.assertEqual(result_equal_25, 3)
         self.assertEqual(result_greater_25, 3)
+
+
+#                                    -- helper function - get_respiration_range_score tests --
+class Spo2Test(unittest.TestCase):
+    """ Test module for get_spo2_score function """
+    
+    def test_get_spo2_score_returns_false_if_passed_string_value(self):
+        """ Confirm get_spo2_score returns False if a string is passed """
+        result = get_spo2_score("something")
+        self.assertFalse(result)
+    
+    def test_get_spo2_score_returns_correct_score_if_observation_range_less_equal_83(self):
+        """ Confirm get_spo2_score returns correct score observation range is <=83 """
+        result_less_83 = get_spo2_score(80)
+        result_equal_83 = get_spo2_score(83)
+        self.assertEqual(result_less_83, 3)
+        self.assertEqual(result_equal_83, 3)
+
+    def test_get_spo2_score_returns_correct_score_if_observation_range_84_85(self):
+        """ Confirm get_spo2_score returns correct score observation range is >=84 and <=85 """
+        result_equal_84 = get_spo2_score(84)
+        result_equal_85 = get_spo2_score(85)
+        self.assertEqual(result_equal_84, 2)
+        self.assertEqual(result_equal_85, 2)
+
+    def test_get_spo2_score_returns_correct_score_if_observation_range_86_87(self):
+        """ Confirm get_spo2_score returns correct score observation range is >=86 and <=87 """
+        result_equal_86 = get_spo2_score(86)
+        result_equal_87 = get_spo2_score(87)
+        self.assertEqual(result_equal_86, 1)
+        self.assertEqual(result_equal_87, 1)
+
+    def test_get_spo2_score_returns_correct_score_if_observation_range_88_92(self):
+        """ Confirm get_spo2_score returns correct score observation range is >=88 and <=92 """
+        result_equal_88 = get_spo2_score(88)
+        result_equal_92 = get_spo2_score(92)
+        self.assertEqual(result_equal_88, 0)
+        self.assertEqual(result_equal_92, 0)
+
+    def test_get_spo2_score_returns_correct_score_if_observation_range_93_air(self):
+        """ Confirm get_spo2_score returns correct score observation range is >=93 and on air """
+        result_equal_93 = get_spo2_score(93, AirOrOxygen.AIR)
+        result_equal_95 = get_spo2_score(95, AirOrOxygen.AIR)
+        self.assertEqual(result_equal_93, 0)
+        self.assertEqual(result_equal_95, 0)
+
+    def test_get_spo2_score_returns_correct_score_if_observation_range_93_94_oxygen(self):
+        """ Confirm get_spo2_score returns correct score observation range is >=93 and <=94 on oxygen """
+        result_equal_93 = get_spo2_score(93, AirOrOxygen.OXYGEN)
+        result_equal_94 = get_spo2_score(94, AirOrOxygen.OXYGEN)
+        self.assertEqual(result_equal_93, 1)
+        self.assertEqual(result_equal_94, 1)
+
+    def test_get_spo2_score_returns_correct_score_if_observation_range_95_96_oxygen(self):
+        """ Confirm get_spo2_score returns correct score observation range is >=95 and <=96 on oxygen """
+        result_equal_95 = get_spo2_score(95, AirOrOxygen.OXYGEN)
+        result_equal_96 = get_spo2_score(96, AirOrOxygen.OXYGEN)
+        self.assertEqual(result_equal_95, 2)
+        self.assertEqual(result_equal_96, 2)
+
+    def test_get_spo2_score_returns_correct_score_if_observation_range_97_greater_oxygen(self):
+        """ Confirm get_spo2_score returns correct score observation range is >=97 on oxygen """
+        result_equal_97 = get_spo2_score(97, AirOrOxygen.OXYGEN)
+        result_equal_100 = get_spo2_score(100, AirOrOxygen.OXYGEN)
+        self.assertEqual(result_equal_97, 3)
+        self.assertEqual(result_equal_100, 3)
+
+   
 
 
 if __name__ == '__main__':

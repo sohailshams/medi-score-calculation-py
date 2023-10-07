@@ -36,3 +36,20 @@ def get_respiration_range_score(respiration_range):
     else:
         return False
 
+
+def get_spo2_score(spo, air_or_oxygen=None):
+   # Check if spO2 is a number
+    if type(spo) != int:
+        return False
+
+    if (spo <= 83 )or (spo >= 97 and air_or_oxygen == AirOrOxygen.OXYGEN):
+      return 3  
+    elif (spo >= 84 and spo <= 85) or (spo >= 95 and spo <= 96 and air_or_oxygen == AirOrOxygen.OXYGEN):
+        return 2
+    elif (spo >= 86 and spo <= 87) or (spo >= 93 and spo <= 94 and air_or_oxygen == AirOrOxygen.OXYGEN):
+        return 1
+    elif (spo >= 88 and spo <= 92) or (spo >= 93 and air_or_oxygen == AirOrOxygen.AIR):
+      return 0
+    else:
+      return False
+
