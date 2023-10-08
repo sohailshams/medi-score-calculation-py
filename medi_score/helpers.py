@@ -7,7 +7,7 @@ def get_air_or_oxygen_score(air_or_oxygen):
         case AirOrOxygen.OXYGEN:
             return air_or_oxygen
         case _:
-            return False
+            return None
         
 def get_consciousness_score(consciousness):
     match consciousness:
@@ -16,12 +16,12 @@ def get_consciousness_score(consciousness):
         case Consciousness.CVPU:
             return consciousness
         case _:
-            return False
+            return None
         
 def get_respiration_range_score(respiration_range):
     # Check if respiration is a number
     if type(respiration_range) != int:
-        return False
+        return None
   
     if respiration_range <= 8:
         return 3
@@ -34,13 +34,13 @@ def get_respiration_range_score(respiration_range):
     elif respiration_range >= 25:
         return 3
     else:
-        return False
+        return None
 
 
 def get_spo2_score(spo, air_or_oxygen=None):
    # Check if spO2 is a number
     if type(spo) != int:
-        return False
+        return None
 
     if (spo <= 83 )or (spo >= 97 and air_or_oxygen == AirOrOxygen.OXYGEN):
       return 3  
@@ -51,7 +51,7 @@ def get_spo2_score(spo, air_or_oxygen=None):
     elif (spo >= 88 and spo <= 92) or (spo >= 93 and air_or_oxygen == AirOrOxygen.AIR):
       return 0
     else:
-      return False
+      return None
 
 def get_temperature_score(temperature):
     # Converting temperature into float data type
@@ -60,7 +60,7 @@ def get_temperature_score(temperature):
         temperature = "{:.1f}".format(temperature)
         temperature = float(temperature)
     except:
-        return False
+        return None
 
     if temperature <= 35.0:
       return 3
@@ -71,5 +71,5 @@ def get_temperature_score(temperature):
     elif temperature >= 39.1:
       return 2
     else:
-      return False
+      return None
     
