@@ -2,6 +2,9 @@ import unittest
 from medi_score.medi_score import medi_score_calculation
 from medi_score.helpers import get_air_or_oxygen_score, get_consciousness_score, get_respiration_range_score, get_spo2_score, get_temperature_score
 from medi_score.Enums import AirOrOxygen, Consciousness
+from medi_score.alert_checker import alert_checker
+from test_data.patient_test_data import medi_score_data
+
 
 #                                    -- medi_score_calculation tests --
 class MediScoreCalculationTest(unittest.TestCase):
@@ -337,7 +340,79 @@ class TemperatureTest(unittest.TestCase):
         self.assertEqual(result_equal_391, 2)
         self.assertEqual(result_equal_40, 2)
 
+#                                    -- alert_checker tests --
+class AlertCheckerTest(unittest.TestCase):
+    """ Test module for alert_checker function """
+    def setUp(self):
+        """ Initialise test data """
+         # Create observation dictionary for patient 1
+        self.observation_dict = {
+            "air_or_oxygen": AirOrOxygen.AIR.value,
+            "consciousness": Consciousness.ALERT.value,
+            "respiration": 15,
+            "spo2": 95,
+            "temperature": 37.1
+        }
+   
+        # Create observation dictionary for patient 2
+        self.observation_dict_two = {
+            "air_or_oxygen": AirOrOxygen.OXYGEN.value,
+            "consciousness": Consciousness.ALERT.value,
+            "respiration": 17,
+            "spo2": 95,
+            "temperature": 37.1
+        }
+   
+        # Create observation dictionary for patient 3
+        self.observation_dict_three = {
+            "air_or_oxygen": AirOrOxygen.OXYGEN.value,
+            "consciousness": Consciousness.CVPU.value,
+            "respiration": 23,
+            "spo2": 88,
+            "temperature": 38.5
+        }
 
+        # Create observation dictionary for patient 4
+        self.observation_dict_four = {
+            "air_or_oxygen": AirOrOxygen.OXYGEN.value,
+            "consciousness": Consciousness.CVPU.value,
+            "respiration": 25,
+            "spo2": 97,
+            "temperature": 35
+        }
+
+        # Single reading medi score data
+        self.medi_score_data_single = [
+            {
+            "id": 1,
+            "time": "06:00",
+            "mediScore": 0,
+            },
+        ]
+
+    def test_alert_checker_returns_false_if_medi_score_did_not_raise_by_2_24_hours(self):
+        """ Confirm alert_checker returns False if medi score did not raise by more than 2 - single reading """
+        medi_score = medi_score_calculation(self.observation_dict)
+        result = alert_checker(medi_score, self.medi_score_data_single)
+        self.assertFalse(result)
+
+    def test_alert_checker_returns_True_if_medi_score_raise_by_2_24_hours(self):
+        """ Confirm alert_checker returns True if medi score raise by more than 2 - single reading """
+        medi_score = medi_score_calculation(self.observation_dict_two)
+        result = alert_checker(medi_score, self.medi_score_data_single)
+        self.assertTrue(result)
+
+    def test_alert_checker_returns_false_if_medi_score_did_not_raise_by_2_24_hours_multiple(self):
+        """ Confirm alert_checker returns False if medi score did not raise by more than 2 - multiple readings """
+        medi_score = medi_score_calculation(self.observation_dict)
+        result = alert_checker(medi_score, medi_score_data)
+        self.assertFalse(result)
+
+    def test_alert_checker_returns_True_if_medi_score_raise_by_2_24_hours_multiple(self):
+        """ Confirm alert_checker returns True if medi score raise by more than 2 - multiple readings """
+        medi_score = medi_score_calculation(self.observation_dict_three)
+        result = alert_checker(medi_score, medi_score_data)
+        self.assertTrue(result)
 
 if __name__ == '__main__':
     unittest.main()
