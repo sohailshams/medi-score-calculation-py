@@ -7,9 +7,124 @@ from medi_score.Enums import AirOrOxygen, Consciousness
 class MediScoreCalculationTest(unittest.TestCase):
     """ Test module for medi_score_calculation function """
 
-    def test_returns_medi_score(self):
-         result = medi_score_calculation()
-         self.assertEqual(result, 'medi score')
+    def setUp(self):
+        """ Initialise test data """
+         # Create observation dictionary for patient 1
+        self.observation_dict = {
+            "air_or_oxygen": AirOrOxygen.AIR.value,
+            "consciousness": Consciousness.ALERT.value,
+            "respiration": 15,
+            "spo2": 95,
+            "temperature": 37.1
+        }
+   
+        # Create observation dictionary for patient 2
+        self.observation_dict_two = {
+            "air_or_oxygen": AirOrOxygen.OXYGEN.value,
+            "consciousness": Consciousness.ALERT.value,
+            "respiration": 17,
+            "spo2": 95,
+            "temperature": 37.1
+        }
+   
+        # Create observation dictionary for patient 3
+        self.observation_dict_three = {
+            "air_or_oxygen": AirOrOxygen.OXYGEN.value,
+            "consciousness": Consciousness.CVPU.value,
+            "respiration": 23,
+            "spo2": 88,
+            "temperature": 38.5
+        }
+
+        # Create observation dictionary for patient 4
+        self.observation_dict_four = {
+            "air_or_oxygen": AirOrOxygen.OXYGEN.value,
+            "consciousness": Consciousness.CVPU.value,
+            "respiration": 25,
+            "spo2": 97,
+            "temperature": 35
+        }
+
+
+    def test_medi_score_calculation_returns_error_message_if_passed_air__oxygen_observation_as_string(self):
+         """ Confirm medi_score_calculation returns an error message if AIR/OXYGEN observation passed as string """
+         # Update air_or_oxygen value to a string
+         self.observation_dict["air_or_oxygen"] = "something"
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, "Please enter correct AIR or OXYGEN input!")
+
+    def test_medi_score_calculation_returns_error_message_if_passed_consciousness_observation_as_string(self):
+         """ Confirm medi_score_calculation returns an error message if consciousness observation passed as string """
+         # Update consciousness value to a string
+         self.observation_dict["consciousness"] = "something"
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, "Please enter correct ALERT or CVPU input!")
+
+    def test_medi_score_calculation_returns_error_message_if_passed_respiration_observation_as_string(self):
+         """ Confirm medi_score_calculation returns an error message if consciousness observation passed as string """
+         # Update respiration value to a string
+         self.observation_dict["respiration"] = "something"
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, "Please enter integer value for Respiration rate")
+
+    def test_medi_score_calculation_returns_error_message_if_passed_spo2_observation_as_string(self):
+         """ Confirm medi_score_calculation returns an error message if spO2 observation passed as string """
+         # Update spo2 value to a string
+         self.observation_dict["spo2"] = "something"
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, "Please enter integer value for spO2")
+
+    def test_medi_score_calculation_returns_error_message_if_passed_temperature_observation_as_string(self):
+         """ Confirm medi_score_calculation returns an error message if temperature observation passed as string """
+         # Update temperature value to a string
+         self.observation_dict["temperature"] = "something"
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, "Please enter correct value for temperature")
+
+    def test_medi_score_calculation_returns_correct_score_if_passed_temperature_observation_as_integer(self):
+         """ Confirm medi_score_calculation returns correct score if temperature observation passed as integer """
+         # Update temperature value to a integer
+         self.observation_dict["temperature"] = 35
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, 3)
+
+    def test_medi_score_calculation_returns_correct_score_if_passed_temperature_observation_with_many_decimal_places(self):
+         """ Confirm medi_score_calculation returns correct score if temperature observation passed as with many decimal places """
+         # Update temperature value 
+         self.observation_dict["temperature"] = 35.22225656656
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, 1)
+
+    def test_medi_score_calculation_returns_correct_score_if_passed_patient_one_observations(self):
+         """ Confirm medi_score_calculation returns correct score of 0 if passed patient one observations """
+         
+         result = medi_score_calculation(self.observation_dict)
+         self.assertEqual(result, 0)
+
+    def test_medi_score_calculation_returns_correct_score_if_passed_patient_two_observations(self):
+         """ Confirm medi_score_calculation returns correct score of 4 if passed patient one observations """
+         
+         result = medi_score_calculation(self.observation_dict_two)
+         self.assertEqual(result, 4)
+
+    def test_medi_score_calculation_returns_correct_score_if_passed_patient_three_observations(self):
+         """ Confirm medi_score_calculation returns correct score of 8 if passed patient one observations """
+         
+         result = medi_score_calculation(self.observation_dict_three)
+         self.assertEqual(result, 8)
+         
+    def test_medi_score_calculation_returns_correct_score_if_passed_patient_four_observations(self):
+         """ Confirm medi_score_calculation returns correct score of 14 if passed patient one observations """
+         
+         result = medi_score_calculation(self.observation_dict_four)
+         self.assertEqual(result, 14)
 
 
 #                                    -- helper function - get_air_or_oxygen_score tests --
@@ -38,15 +153,15 @@ class AirOrOxygenTest(unittest.TestCase):
 class ConsciousnessTest(unittest.TestCase):
     """ Test module for get_consciousness_score function """
     
-    def test_get_consciousness_score_returns_false_if_passed_string_value(self):
-        """ Confirm get_consciousness_score returns False if a string is passed """
+    def test_get_consciousness_score_returns_none_if_passed_string_value(self):
+        """ Confirm get_consciousness_score returns None if a string is passed """
         result = get_consciousness_score('nonsense')
-        self.assertFalse(result)
+        self.assertIsNone(result)
     
-    def test_get_consciousness_score_returns_false_if_incorrect_passed_value(self):
-        """ Confirm get_consciousness_score returns False if a incorrect value is passed """
+    def test_get_consciousness_score_returns_none_if_incorrect_passed_value(self):
+        """ Confirm get_consciousness_score returns None if a incorrect value is passed """
         result = get_consciousness_score(7)
-        self.assertFalse(result)
+        self.assertIsNone(result)
 
     def test_get_consciousness_score_returns_correct_score(self):
         """ Confirm get_consciousness_score returns correct score when passed 'AIR' or 'OXYGEN' """
@@ -60,10 +175,10 @@ class ConsciousnessTest(unittest.TestCase):
 class RespirationRangeTest(unittest.TestCase):
     """ Test module for get_respiration_range_score function """
     
-    def test_get_respiration_range_score_returns_false_if_passed_string_value(self):
-        """ Confirm get_respiration_range_score returns False if a string is passed """
+    def test_get_respiration_range_score_returns_none_if_passed_string_value(self):
+        """ Confirm get_respiration_range_score returns None if a string is passed """
         result = get_respiration_range_score("something")
-        self.assertFalse(result)
+        self.assertIsNone(result)
     
     def test_get_respiration_range_score_returns_correct_score_if_observation_range_less_equal_8(self):
         """ Confirm get_respiration_range_score returns correct score observation range is <=8 """
@@ -111,10 +226,10 @@ class RespirationRangeTest(unittest.TestCase):
 class Spo2Test(unittest.TestCase):
     """ Test module for get_spo2_score function """
     
-    def test_get_spo2_score_returns_false_if_passed_string_value(self):
-        """ Confirm get_spo2_score returns False if a string is passed """
+    def test_get_spo2_score_returns_none_if_passed_string_value(self):
+        """ Confirm get_spo2_score returns None if a string is passed """
         result = get_spo2_score("something")
-        self.assertFalse(result)
+        self.assertIsNone(result)
     
     def test_get_spo2_score_returns_correct_score_if_observation_range_less_equal_83(self):
         """ Confirm get_spo2_score returns correct score observation range is <=83 """
@@ -177,10 +292,10 @@ class Spo2Test(unittest.TestCase):
 class TemperatureTest(unittest.TestCase):
     """ Test module for get_temperature_score function """
     
-    def test_get_temperature_score_returns_false_if_passed_string_value(self):
-        """ Confirm get_temperature_score returns False if a string is passed """
+    def test_get_temperature_score_returns_none_if_passed_string_value(self):
+        """ Confirm get_temperature_score returns None if a string is passed """
         result = get_temperature_score('something')
-        self.assertFalse(result)
+        self.assertIsNone(result)
 
     def test_get_temperature_score_returns_correct_score_if_passed_multi_decimal_place_value(self):
         """ Confirm get_temperature_score returns correct score observation range is <=35.59999 """
