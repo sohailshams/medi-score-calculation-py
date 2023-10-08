@@ -104,30 +104,40 @@ class MediScoreCalculationTest(unittest.TestCase):
          
          result = medi_score_calculation(self.observation_dict)
          self.assertEqual(result, 1)
-
+    
+    # Patient 1 - no alert
     def test_medi_score_calculation_returns_correct_score_if_passed_patient_one_observations(self):
          """ Confirm medi_score_calculation returns correct score of 0 if passed patient one observations """
          
          result = medi_score_calculation(self.observation_dict)
          self.assertEqual(result, 0)
-
+         self.assertFalse(alert_checker(result, medi_score_data))
+    
+    # Patient 2 - alert
     def test_medi_score_calculation_returns_correct_score_if_passed_patient_two_observations(self):
          """ Confirm medi_score_calculation returns correct score of 4 if passed patient one observations """
          
          result = medi_score_calculation(self.observation_dict_two)
          self.assertEqual(result, 4)
+         self.assertTrue(alert_checker(result, medi_score_data))
 
+    # Patient 3 - alert
     def test_medi_score_calculation_returns_correct_score_if_passed_patient_three_observations(self):
          """ Confirm medi_score_calculation returns correct score of 8 if passed patient one observations """
          
          result = medi_score_calculation(self.observation_dict_three)
          self.assertEqual(result, 8)
+         self.assertTrue(alert_checker(result, medi_score_data))
+
          
+    # Patient 4 - alert
     def test_medi_score_calculation_returns_correct_score_if_passed_patient_four_observations(self):
          """ Confirm medi_score_calculation returns correct score of 14 if passed patient one observations """
          
          result = medi_score_calculation(self.observation_dict_four)
          self.assertEqual(result, 14)
+         self.assertTrue(alert_checker(result, medi_score_data))
+
 
 
 #                                    -- helper function - get_air_or_oxygen_score tests --
@@ -370,15 +380,6 @@ class AlertCheckerTest(unittest.TestCase):
             "respiration": 23,
             "spo2": 88,
             "temperature": 38.5
-        }
-
-        # Create observation dictionary for patient 4
-        self.observation_dict_four = {
-            "air_or_oxygen": AirOrOxygen.OXYGEN.value,
-            "consciousness": Consciousness.CVPU.value,
-            "respiration": 25,
-            "spo2": 97,
-            "temperature": 35
         }
 
         # Single reading medi score data
