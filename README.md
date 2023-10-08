@@ -18,7 +18,7 @@ The Medi Score Calculation is a simple function to calculate score of a patient 
 
 ## Developemt Process
 
-I developed this function in python and also setup python [unittest — Unit testing framework](https://docs.python.org/3/library/unittest.html) for testing purpose to make this function robust. My approach was to create a function that take observations as dictionary and then calculate the score of each individual observation object property. So I developed following functions in connection to the main **medi_score_calculation** function;
+I developed this function in python and also setup python [unittest — Unit testing framework](https://docs.python.org/3/library/unittest.html) for testing purpose to make this function robust. My approach was to create a function that take observations as dictionary and then calculate the score of each individual observation dictionary property. So I developed following functions in connection to the main **medi_score_calculation** function;
 
 1. get_air_or_oxygen_score
 1. get_consciousness_score
@@ -30,7 +30,7 @@ Finally I added the scores to get the total of all and returned an error message
 
 ## Testing
 
-I followed test driven development approach and wrote comprehensive test scenarios for all functions. For testing **_get_air_or_oxygen_score_**, **_get_consciousness_score_**, **_get_respiration_range_score_**, **_get_spo2_score_** and **_get_temperature_score_** I wrote tests for the individual function and also tested the main **medi_score_calculation**. This function takes **_observation_dict_** dictionary as a parameter with different values and correct value is vaified as per following table. Please note ranges are inclusive.
+I followed test driven development approach and wrote comprehensive test scenarios for all functions. For testing **_get_air_or_oxygen_score_**, **_get_consciousness_score_**, **_get_respiration_range_score_**, **_get_spo2_score_** and **_get_temperature_score_** I wrote tests for the individual function and also tested the main **medi_score_calculation** function seperately. This function takes **_observation_dict_** dictionary as a parameter with different values and correct value is varified as per following table. Please note ranges are inclusive.
 
 |           Property            | Score 3 | Score 2 |  Score 1  |        Score 0        |     Score 1     |     Score 2     |    Score 3    |
 | :---------------------------: | :-----: | :-----: | :-------: | :-------------------: | :-------------: | :-------------: | :-----------: |
@@ -101,20 +101,20 @@ I followed test driven development approach and wrote comprehensive test scenari
 
 ## Bonus Flagging an Alert
 
-To develop this function I created mock data which is an array and contains dictionaries of medi score with time and id. I also assumed that this mock data is associdated to the current patient and this array contains data for only last 24 hours. This function is taking medi score and the test data list as parameters and compare the total medi score against the previous readings taken within 24 hours and if the score is raised by more than 2 in the current reading, the function will return true and a message will be rendered.
+To develop this function I created mock data which is a list and contains dictionaries of medi score with time and id. I also assumed that this mock data is associdated to the current patient and this list contains data for only last 24 hours. This function is taking medi score and the test data list as parameters and compare the total medi score against the previous readings taken within 24 hours and if the score is raised by more than 2 in the current reading, the function will return True else False.
 
 ## Bonus CBG
 
-Since I have completed this task in JavaScript and did not had enough time so I left it. But I will follow the same approach, by have a is_fasting a bolean in observation dictionaly as being False by default and use the the corresponding CBG ranges. But if patient is fasting then I will use the fasting CBG ranges. To accomplish this I will have a check box to get user input and will change is_fasting value to True if user tich the check box.
+Since I have completed this task in JavaScript and did not had enough time so I left it bonus task. But I will follow the same approach, by having, is_fasting a bolean in observation dictionary as being False by default and use the corresponding CBG ranges. But if patient is fasting then I will use the fasting CBG ranges. To accomplish this I will have a check box to get user's input and will change is_fasting value to True if user tick the check box.
 
 #### If/Elif/Else Statement- Match case
 
-I mainly used if/elif/else statement but also use match and case statement.
+I mainly used if/elif/else statement but also use match and case statement for **_get_air_or_oxygen_score_** and **_get_consciousness_score_** functions.
 
 ## Technologies Used
 
 - [Python](https://www.python.org/)
-  [unittest — Unit testing framework](https://docs.python.org/3/library/unittest.html)
+- [unittest — Unit testing framework](https://docs.python.org/3/library/unittest.html)
 
 ## Local Deployment
 
@@ -128,4 +128,4 @@ Please follow these steps to run this project locally on your machine;
 1. Open the project in code editor of your choice
 1. Go to the project directory and run **python -m unittest tests.medi_score_tests** command
 1. Please note if running on macos or ubuntu use followng command **python3 -m unittest tests.medi_score_tests**
-1. For running a single test suite please follow this command **python3 -m unittest tests.medi_score_tests<class of each test suite>**
+1. For running a single test suite please follow this command **python3 -m unittest tests.medi_score_tests\<class name of each test suite>**
